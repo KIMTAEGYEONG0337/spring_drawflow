@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Drawflow</title>
+</head>
+<body>
+<script src="drawflow.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="src/drawflow.css" />
+<link rel="stylesheet" type="text/css" href="docs/beautiful.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ=" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+<script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
+
+
+<header>
+    <h2>Drawflow</h2>
+    <div class="github-link"><a href="https://github.com/jerosoler/Drawflow" target="_blank"><i class="fab fa-github fa-3x"></i></a></div>
+</header>
+<div class="wrapper">
+    <div class="col">
+        <div class="button-container">
+            <div class="btn-add" onclick="addModule();">ADD</div>
+            <div class="btn-delete" onclick="deleteModule()">DEL</div>
+        </div>
+        <ul>
+            <li onclick="editor.changeModule('Home'); changeModule(event)" class="selected" >Home</li>
+        </ul>
+    </div>
+    <div class="col-center">
+        <!--        <div class="menu">-->
+        <!--          <ul>-->
+        <!--            <li onclick="editor.changeModule('Home'); changeModule(event);" class="selected">Home</li>-->
+        <!--            <li onclick="editor.changeModule('Other'); changeModule(event);">Other Module</li>-->
+        <!--          </ul>-->
+        <!--        </div>-->
+        <div id="drawflow" ondrop="drop(event)" ondragover="allowDrop(event)">
+
+            <!--          <div class="btn-export" onclick="Swal.fire({ title: 'Export',-->
+            <!--            html: '<pre><code>'+JSON.stringify(editor.export(), null,4)+'</code></pre>'-->
+            <!--            })">Export</div>-->
+            <div class="btn-export" onclick="exportJson()">Export</div>
+            <div class="btn-clear" onclick="editor.clearModuleSelected()">Clear</div>
+            <div class="btn-play" onclick="play()">Play</div>
+            <div class="btn-import" onclick="importJson()">Import</div>
+            <div class="btn-lock">
+                <i id="lock" class="fas fa-lock" onclick="editor.editor_mode='fixed'; changeMode('lock');"></i>
+                <i id="unlock" class="fas fa-lock-open" onclick="editor.editor_mode='edit'; changeMode('unlock');" style="display:none;"></i>
+            </div>
+            <div class="bar-zoom">
+                <i class="fas fa-search-minus" onclick="editor.zoom_out()"></i>
+                <i class="fas fa-search" onclick="editor.zoom_reset()"></i>
+                <i class="fas fa-search-plus" onclick="editor.zoom_in()"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="drag-drawflow" draggable="true" ondragstart="drag(event)" data-node="memo">
+            <i class="fas fa-sticky-note"></i><span> Memo</span>
+        </div>
+        <div class="drag-drawflow" draggable="true" ondragstart="drag(event)" data-node="sql">
+            <i class="fas fa-database"></i><span> SQL</span>
+        </div>
+        <div class="drag-drawflow" draggable="true" ondragstart="drag(event)" data-node="github">
+            <i class="fab fa-github"></i><span> Github Star</span>
+        </div>
+        <div class="drag-drawflow" draggable="true" ondragstart="drag(event)" data-node="telegram">
+            <i class="fab fa-telegram"></i><span> Telegram send message</span>
+        </div>
+        <div class="drag-drawflow" draggable="true" ondragstart="drag(event)" data-node="aws">
+            <i class="fab fa-aws"></i><span> AWS</span>
+        </div>
+        <div class="drag-drawflow" draggable="true" ondragstart="drag(event)" data-node="log">
+            <i class="fas fa-file-signature"></i><span> File Log</span>
+        </div>
+        <div class="drag-drawflow" draggable="true" ondragstart="drag(event)" data-node="google">
+            <i class="fab fa-google-drive"></i><span> Google Drive save</span>
+        </div>
+        <div class="drag-drawflow" draggable="true" ondragstart="drag(event)" data-node="email">
+            <i class="fas fa-at"></i><span> Email send</span>
+        </div>
+        <div class="drag-drawflow" draggable="true" ondragstart="drag(event)" data-node="template">
+            <i class="fas fa-code"></i><span> Template</span>
+        </div>
+        <div class="drag-drawflow" draggable="true" ondragstart="drag(event)" data-node="multiple">
+            <i class="fas fa-code-branch"></i><span> Multiple inputs/outputs</span>
+        </div>
+        <div class="drag-drawflow" draggable="true" ondragstart="drag(event)" data-node="personalized">
+            <i class="fas fa-fill"></i><span> Personalized</span>
+        </div>
+        <div class="drag-drawflow" draggable="true" ondragstart="drag(event)" data-node="dbclick">
+            <i class="fas fa-mouse"></i><span> DBClick!</span>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/gh/jerosoler/Drawflow/dist/drawflow.min.js"></script>
+
+<link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jerosoler/Drawflow/dist/drawflow.min.css"
+/>
+<!--node design-->
+<link
+        rel="stylesheet"
+        type="text/css"
+        href="/css/nodeStyles.css"
+/>
+<!-- Project Select by ProgMst-ID -->
+<script type="module" src="/func/ProjectSelect.js"></script>
+<script>
+    var elements = document.getElementsByClassName('drag-drawflow');
+    for (var i = 0; i < elements.length; i++) {
+        elements[i].addEventListener('touchend', drop, false);
+        elements[i].addEventListener('touchstart', drag, false );
+    }
+
+    var tmp_prog_mst = {
+        progId: 0,
+        progNm: "new project",
+        progDesc: "",
+        viewAttr: {},
+        useYn: false,
+        crtdDttm: "",
+        updtDttm: "",
+        dltDttm: ""
+    }
+
+    var id = document.getElementById("drawflow");
+    console.log(id);
+    const editor = new Drawflow(id);
+    editor.start();
+
+
+    /* Editor Event */
+    editor.on('nodeCreated', function(id) {
+        console.log("Node created " + id);
+    })
+
+    editor.on('nodeRemoved', function(id) {
+        console.log("Node removed " + id);
+    })
+
+    editor.on('nodeSelected', function(id) {
+        console.log("Node selected " + id);
+    })
+
+    editor.on('moduleCreated', function(name) {
+        console.log("Module Created " + name);
+    })
+
+    editor.on('moduleChanged', function(name) {
+        console.log("Module Changed " + name);
+    })
+
+    editor.on('connectionCreated', function(connection) {
+        console.log('Connection Created');
+        console.log(connection);
+    })
+
+    editor.on('connectionRemoved', function(connection) {
+        console.log('Connection removed');
+        console.log(connection);
+    })
+
+    editor.on('nodeMoved', function(id) {
+        console.log("Node moved " + id);
+    })
+
+    editor.on('zoom', function(zoom) {
+        console.log('Zoom level ' + zoom);
+    })
+
+    editor.on('translate', function(position) {
+        console.log('Translate x:' + position.x + ' y:'+ position.y);
+    })
+
+    editor.on('addReroute', function(id) {
+        console.log("Reroute added " + id);
+    })
+
+    editor.on('removeReroute', function(id) {
+        console.log("Reroute removed " + id);
+    })
+
+    editor.on('mouseMove', function(position) {
+
+    });
+
+    /* Button Event */
+    function exportJson() {
+        exportdata = editor.export();
+        jsonData = JSON.stringify(exportdata);
+    }
+    function importJson() {
+        editor.import(JSON.parse(jsonData));
+        rebindEvents(editor);
+    }
+
+    function rebindEvents(editor) {
+        let data = editor.drawflow.drawflow.Home;
+        for(let nodeId in data.data) {
+            let nodeData = editor.getNodeFromId(nodeId);
+
+            // node class에 따라 binding 할 event를 적절히 선택
+            switch(nodeData.name) {
+                case 'memo':
+                    // Box size는 JSON data에 포함되어 있지 않으므로 manual로 적용해줘야 함.
+                    var textAreaElement = document.getElementById(`textArea${nodeData.data.flowId}`);
+                    textAreaElement.oninput = function(event) {
+                        updateMemoNodeData(editor, event);
+                    };
+                    textAreaElement.onmousedown = function(event) {
+                        stopMemoPropagation(event);
+                    };
+                case 'sql' :
+                    document.getElementById(`myImage${nodeData.data.flowId}`).ondblclick = function(event) {
+                        showSqlModal(editor, event);
+                    };
+                    document.getElementById(`closeModal${nodeData.data.flowId}`).onclick = function(event) {
+                        closeSqlModal(editor, event);
+                    };
+                    document.getElementById(`inputField${nodeData.data.flowId}`).oninput = function(event) {
+                        updateSqlNodeData(editor, event);
+                    };
+            }
+        }
+    }
+
+    function changeMode(option) {
+
+        //console.log(lock.id);
+        if(option == 'lock') {
+            lock.style.display = 'none';
+            unlock.style.display = 'block';
+        } else {
+            lock.style.display = 'block';
+            unlock.style.display = 'none';
+        }
+
+    }
+
+    /* 낮은 ID 부터 탐색한다는 맹점이 있음. 초기 Node를 설정할 마땅한 대안이 필요함 */
+    function play() {
+        let data =editor.drawflow.drawflow.Home;
+        let workflowset = [];
+
+        let visited = {};
+
+        for(let nodeId in data.data) {
+            if (!visited[nodeId]) {
+                let order = [];
+                let startNodeId = nodeId;
+                dfs(startNodeId, visited, order);
+                workflowset.push(order);
+            }
+        }
+
+        console.log(workflowset);
+    }
+
+    function dfs(nodeId, visited, order) {
+        if (!visited[nodeId]) {
+            visited[nodeId] = true;
+            order.push(nodeId);
+
+            let node = editor.getNodeFromId(nodeId);
+
+            for(let outputId in node.outputs) {
+                let connections = node.outputs[outputId].connections;
+                for (let connection of connections) {
+                    let nextNodeId = connection.node;
+                    dfs(nextNodeId, visited, order);
+                }
+            }
+        }
+    }
+
+
+    /* DRAG EVENT */
+    function allowDrop(ev) {
+        ev.preventDefault();
+    }
+
+    function drag(ev) {
+        ev.dataTransfer.setData("node", ev.target.getAttribute('data-node'));
+    }
+
+    function drop(ev) {
+        ev.preventDefault();
+        var data = ev.dataTransfer.getData("node");
+        addNodeToDrawFlow(editor, data, ev.clientX, ev.clientY);
+    }
+
+    async function addNodeToDrawFlow(editor, name, pos_x, pos_y) {
+        if(editor.editor_mode === 'fixed') {
+            return false;
+        }
+        pos_x = pos_x * ( editor.precanvas.clientWidth / (editor.precanvas.clientWidth * editor.zoom)) - (editor.precanvas.getBoundingClientRect().x * ( editor.precanvas.clientWidth / (editor.precanvas.clientWidth * editor.zoom)));
+        pos_y = pos_y * ( editor.precanvas.clientHeight / (editor.precanvas.clientHeight * editor.zoom)) - (editor.precanvas.getBoundingClientRect().y * ( editor.precanvas.clientHeight / (editor.precanvas.clientHeight * editor.zoom)));
+
+        switch (name) {
+            case 'memo':
+                var module = await import('/node/memoNode.js');
+                module.createNode(editor, name, pos_x, pos_y);
+                break;
+
+            case 'sql' :
+                // 각 노드는 creatNode시에 생기는 ID와는 별개로 class_posx_posy를 고유 flowId로 가진다
+                var module = await import('/node/sqlNode.js');
+                module.createNode(editor, name, pos_x, pos_y);
+                break;
+        }
+    }
+
+
+    /* Module Event */
+    async function addModule() {
+        const { value: name } = await Swal.fire({
+            title: 'Enter module name',
+            input: 'text',
+            inputPlaceholder: 'Module name'
+        });
+
+        if (name) {
+            editor.addModule(name);
+            var ul = document.querySelector('.col ul');
+            var li = document.createElement('li');
+            li.textContent = name;
+            li.onclick = function() {
+                editor.changeModule(name);
+                changeModule(event);
+            };
+            ul.appendChild(li);
+        }
+    }
+
+    async function deleteModule() {
+        const { value: name } = await Swal.fire({
+            title: 'Enter module name',
+            input: 'text',
+            inputPlaceholder: 'Module name'
+        });
+
+        if (name) {
+            var ul = document.querySelector('.col ul');
+            var lis = ul.getElementsByTagName('li');
+            for (var i = 0; i < lis.length; i++) {
+                if (lis[i].textContent === name) {
+                    editor.removeModule(name);
+                    ul.removeChild(lis[i]);
+                    break;
+                }
+            }
+        }
+    }
+
+    function changeModule(event) {
+        var all = document.querySelectorAll(".col ul li");
+        for (var i = 0; i < all.length; i++) {
+            all[i].classList.remove('selected');
+        }
+        event.target.classList.add('selected');
+    }
+
+</script>
+</body>
+</html>

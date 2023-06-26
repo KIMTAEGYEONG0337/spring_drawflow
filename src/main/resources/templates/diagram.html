@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Drawflow</title>
+    <script src="../static/func/DragEvent.js"></script>
+</head>
+<body>
+    <script src="drawflow.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="src/drawflow.css" />
+    <link rel="stylesheet" type="text/css" href="docs/beautiful.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ=" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
+
+    <header>
+        <h2>Drawflow</h2>
+        <div class="github-link"><a href="https://github.com/jerosoler/Drawflow" target="_blank"><i class="fab fa-github fa-3x"></i></a></div>
+    </header>
+    <div class="wrapper">
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <label for="module-name">Enter module name</label>
+                <input type="text" id="module-name" name="module-name" placeholder="Module name">
+                <button id="modal-submit">Submit</button>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="button-container">
+                <div class="btn-add" id="add">ADD</div>
+                <div class="btn-delete" id="delete">DEL</div>
+            </div>
+            <ul>
+                <li id="change" class="selected" >Home</li>
+<!--                <li id="change" onclick="editor.changeModule('Home');" class="selected" >Home</li>-->
+            </ul>
+        </div>
+        <div class="col-center">
+            <div id="drawflow">
+                <div class="btn-export" id="export">Export</div>
+                <div class="btn-clear" id="clear">Clear</div>
+                <div class="btn-play" id="play">Play</div>
+                <div class="btn-import" id="import">Import</div>
+                <div class="btn-lock">
+                    <i id="lock" class="fas fa-lock" onclick="editor.editor_mode='fixed'; changeMode('lock');"></i>
+                    <i id="unlock" class="fas fa-lock-open" onclick="editor.editor_mode='edit'; changeMode('unlock');" style="display:none;"></i>
+                </div>
+                <div class="bar-zoom">
+                    <i class="fas fa-search-minus" onclick="editor.zoom_out()"></i>
+                    <i class="fas fa-search" onclick="editor.zoom_reset()"></i>
+                    <i class="fas fa-search-plus" onclick="editor.zoom_in()"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="drag-drawflow" draggable="true" data-node="memo">
+                <i class="fas fa-sticky-note"></i><span> Memo</span>
+            </div>
+            <div class="drag-drawflow" draggable="true" data-node="sql">
+                <i class="fas fa-database"></i><span> SQL</span>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/gh/jerosoler/Drawflow/dist/drawflow.min.js"></script>
+
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/gh/jerosoler/Drawflow/dist/drawflow.min.css"
+    />
+    <!--node design-->
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="/css/nodeStyles.css"
+    />
+    <script>
+        var tmp_prog_mst = {
+            progId: 0,
+            progNm: "new project",
+            progDesc: "",
+            viewAttr: {},
+            useYn: false,
+            crtdDttm: "",
+            updtDttm: "",
+            dltDttm: ""
+        }
+
+        var id = document.getElementById("drawflow");
+        var editor = new Drawflow(id);
+        editor.start();
+
+        function changeMode(option) {
+            if(option == 'lock') {
+                lock.style.display = 'none';
+                unlock.style.display = 'block';
+            } else {
+                lock.style.display = 'block';
+                unlock.style.display = 'none';
+            }
+        }
+
+        var moduleList = Object.keys(editor.drawflow.drawflow);
+        console.log(moduleList);
+    </script>
+    <script type="module" src="/func/ProjectSelect.js"></script>
+    <script type="module" src="/func/InitEditorEvent.js"></script>
+    <script type="module" src="/func/DragEvent.js"></script>
+    <script type="module" src="/func/ButtonEvent.js"></script>
+    <script type="module" src="/func/ModuleEvent.js"></script>
+</body>
+</html>
