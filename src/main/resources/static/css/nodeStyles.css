@@ -453,7 +453,7 @@ header a {
 .modal {
     display: none;
     position: fixed;
-    z-index: 7;
+    z-index: 9999;
     left: 0;
     top: 0;
     width: 100vw;
