@@ -3,18 +3,18 @@ export function createSqlNode(editor, name, pos_x, pos_y) {
     const nodeId = `${name}_${pos_x}_${pos_y}`; // 노드의 고유 ID
     let inputN = `<div>
         <div class="title-box">DataBase</div>
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGZaz1uTiKJsyaDb-hTIFPu96fFRJbhmtdeA&usqp=CAU"
-                 style="width: 70px; height: 70px; padding-left: 7px; padding-right: 7px"
-                 alt="My Image"
-                 id="myImage${nodeId}"
-                >
-                <div class="modal" style="display: none">
-                    <div class="modal-content">
-                        <span class="close" id="closeModal${nodeId}">&times;</span>
-                        Change your variable {name} !
-                        <input type="text" df-flowAttr-sql id="inputField${nodeId}">
-                    </div>
-                </div>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGZaz1uTiKJsyaDb-hTIFPu96fFRJbhmtdeA&usqp=CAU"
+         style="width: 70px; height: 70px; padding-left: 7px; padding-right: 7px"
+         alt="My Image"
+         id="myImage${nodeId}"
+        >
+        <div class="modal" style="display: none">
+            <div class="modal-content">
+                <span class="close" id="closeModal${nodeId}">&times;</span>
+                Change your variable {name} !
+                <input type="text" df-flowAttr-sql id="inputField${nodeId}">
+            </div>
+        </div>
     </div>`;
 
     let progWorkFlowMng = {
@@ -53,13 +53,15 @@ export function globalSqlNodeHandler() {
 }
 
 export function showSqlModal(editor, e) {
-    // 모달 창을 찾습니다.
     let modal = e.target.parentElement.querySelector(".modal");
 
-    // 모달 창을 엽니다.
+    e.target.closest(".drawflow-node").style.zIndex = "9999";
     modal.style.display = "block";
+    window.transform = editor.precanvas.style.transform;
+    editor.precanvas.style.transform = '';
+    editor.precanvas.style.left = editor.canvas_x + 'px';
+    editor.precanvas.style.top = editor.canvas_y + 'px';
 
-    // 이벤트가 발생한 노드의 ID를 가져옵니다.
     let nodeId = e.target.closest(".drawflow-node").id;
 
     // 노드 ID를 모달 창의 데이터 속성에 저장합니다.
@@ -68,7 +70,7 @@ export function showSqlModal(editor, e) {
     let inputField = modal.querySelector("input");
     inputField.focus();
 
-    console.log( e.target.closest(".drawflow-node"));
+    // console.log( e.target.closest(".drawflow-node"));
 
     // 에디터의 모드를 변경합니다.
     editor.editor_mode = 'fixed';
@@ -77,11 +79,13 @@ export function showSqlModal(editor, e) {
 export function closeSqlModal(editor, e) {
     // 모달 창을 찾습니다.
     let modal = e.target.parentElement.parentElement;
-
+    e.target.closest(".drawflow-node").style.zIndex = "2";
     // 모달 창을 닫습니다.
     modal.style.display = "none";
-
-    editor.editor_mode = 'edit';
+    editor.precanvas.style.transform = transform;
+    editor.precanvas.style.left = '0px';
+    editor.precanvas.style.top = '0px';
+    editor.editor_mode = "edit";
 }
 
 export function updateSqlNodeData(editor, e) {
