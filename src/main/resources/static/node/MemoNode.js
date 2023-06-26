@@ -21,13 +21,21 @@ export function createMemoNode(editor, name, pos_x, pos_y) {
 
     editor.addNode(name, 0, 0, pos_x, pos_y, name, progWorkFlowMng, inputN);
 
-    var textAreaElement = document.getElementById(`textArea${nodeId}`);
-    textAreaElement.oninput = function(event) {
+    // var textAreaElement = document.getElementById(`textArea${nodeId}`);
+    let textAreaElement = $(`#textArea${nodeId}`);
+
+    // textAreaElement.oninput = function(event) {
+    //     updateMemoNodeData(editor, event);
+    // };
+    // textAreaElement.onmousedown = function(event) {
+    //     stopMemoPropagation(event);
+    // };
+    textAreaElement.on('input', function(event) {
         updateMemoNodeData(editor, event);
-    };
-    textAreaElement.onmousedown = function(event) {
+    });
+    textAreaElement.on('mousedown', function(event) {
         stopMemoPropagation(event);
-    };
+    });
 
     globalMemoNodeHandler();
 }
@@ -43,12 +51,16 @@ export function stopMemoPropagation(event) {
 
 export function updateMemoNodeData(editor, e) {
     // 입력 필드에서 데이터를 가져옵니다.
-    var inputValue = e.target.value;
 
-    var textarea = e.target.closest(".textarea");
+    // var inputValue = e.target.value;
+    let inputValue = $(e.target).val();
+
+    // var textarea = e.target.closest(".textarea");
+    let textarea = $(e.target).closest(".textarea");
 
     // 모달 창의 데이터 속성에서 노드 ID를 가져옵니다.
-    var nodeId = textarea.dataset.nodeId;
+    // var nodeId = textarea.dataset.nodeId;
+    let nodeId = textarea.data("nodeId");
 
     // 노드의 데이터를 업데이트합니다.
     editor.updateNodeDataFromId(nodeId, { flowAttr: {memo : inputValue} });

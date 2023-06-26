@@ -1,5 +1,5 @@
-import {saveProject} from "./ProgMstCRUD.js";
-import {rebindEvents} from "./RebindEvent.js";
+import {loadProject, saveProject} from "./ProgMstCRUD.js";
+import {rebindModule} from "./ModuleEvent.js";
 
 editor = window.editor;
 
@@ -26,9 +26,40 @@ function exportJson() {
     saveProject(progMst);
 }
 function importJson() {
-    // editor.import(JSON.parse(jsonData));
-    // rebindEvents(editor);
+    Swal.fire({
+        title: 'Enter Project ID',
+        input: 'number',
+        inputAttributes: {
+            autocapitalize: 'off'
+        },
+        preConfirm: (number) => {
+            return loadProject(number, tmp_prog_mst)
+                .then(data => {
+                    tmp_prog_mst = data;
+                    return data;
+                })
+                .catch(error => {
+                    Swal.showValidationMessage(`Request failed: ${error}`);
+                    throw error;
+                })
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+        if (result.isConfirmed) {
+            tmp_prog_mst.viewAttr = JSON.parse(tmp_prog_mst.viewAttr);
+            editor.import(tmp_prog_mst.viewAttr);
 
+            // Next tick.
+            Promise.resolve().then(() => {
+                rebindModule(Object.keys(editor.drawflow.drawflow));
+            });
+
+            // why? // important!!
+            window.tmp_prog_mst = tmp_prog_mst;
+            console.log(window.tmp_prog_mst);
+            console.log("진행하세요");
+        }
+    });
 }
 
 /* Play Event */

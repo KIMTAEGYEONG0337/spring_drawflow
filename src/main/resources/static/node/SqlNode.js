@@ -1,7 +1,7 @@
 // img 태그를 사용했지만 icon을 활용할 수 있을 것
 export function createSqlNode(editor, name, pos_x, pos_y) {
     const nodeId = `${name}_${pos_x}_${pos_y}`; // 노드의 고유 ID
-    var inputN = `<div>
+    let inputN = `<div>
         <div class="title-box">DataBase</div>
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGZaz1uTiKJsyaDb-hTIFPu96fFRJbhmtdeA&usqp=CAU"
                  style="width: 70px; height: 70px; padding-left: 7px; padding-right: 7px"
@@ -17,7 +17,7 @@ export function createSqlNode(editor, name, pos_x, pos_y) {
                 </div>
     </div>`;
 
-    var progWorkFlowMng = {
+    let progWorkFlowMng = {
         flowId: nodeId, // 내장되어 있긴 함
         progId: -1,
         flowSeq: -1,
@@ -32,7 +32,6 @@ export function createSqlNode(editor, name, pos_x, pos_y) {
 
     editor.addNode(name, 1, 1, pos_x, pos_y, name, progWorkFlowMng, inputN);
 
-    // 노드가 DOM에 추가된 후에 이벤트 핸들러를 연결합니다.
     document.getElementById(`myImage${nodeId}`).ondblclick = function(event) {
         showSqlModal(editor, event);
     };
@@ -55,18 +54,18 @@ export function globalSqlNodeHandler() {
 
 export function showSqlModal(editor, e) {
     // 모달 창을 찾습니다.
-    var modal = e.target.parentElement.querySelector(".modal");
+    let modal = e.target.parentElement.querySelector(".modal");
 
     // 모달 창을 엽니다.
     modal.style.display = "block";
 
     // 이벤트가 발생한 노드의 ID를 가져옵니다.
-    var nodeId = e.target.closest(".drawflow-node").id;
+    let nodeId = e.target.closest(".drawflow-node").id;
 
     // 노드 ID를 모달 창의 데이터 속성에 저장합니다.
     modal.dataset.nodeId = nodeId;
 
-    var inputField = modal.querySelector("input");
+    let inputField = modal.querySelector("input");
     inputField.focus();
 
     console.log( e.target.closest(".drawflow-node"));
@@ -77,7 +76,7 @@ export function showSqlModal(editor, e) {
 
 export function closeSqlModal(editor, e) {
     // 모달 창을 찾습니다.
-    var modal = e.target.parentElement.parentElement;
+    let modal = e.target.parentElement.parentElement;
 
     // 모달 창을 닫습니다.
     modal.style.display = "none";
@@ -87,13 +86,13 @@ export function closeSqlModal(editor, e) {
 
 export function updateSqlNodeData(editor, e) {
     // 입력 필드에서 데이터를 가져옵니다.
-    var inputValue = e.target.value;
+    let inputValue = e.target.value;
 
     // 모달 창을 찾습니다.
-    var modal = e.target.closest(".modal");
+    let modal = e.target.closest(".modal");
 
     // 모달 창의 데이터 속성에서 노드 ID를 가져옵니다.
-    var nodeId = modal.dataset.nodeId;
+    let nodeId = modal.dataset.nodeId;
 
     // Uncaught TypeError, reading 'data'
     // 노드의 데이터를 업데이트

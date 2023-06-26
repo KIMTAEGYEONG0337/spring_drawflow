@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Drawflow</title>
-    <script src="../static/func/DragEvent.js"></script>
+    <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
 <body>
     <script src="drawflow.min.js"></script>
@@ -30,7 +30,6 @@
                 <button id="modal-submit">Submit</button>
             </div>
         </div>
-
         <div class="col">
             <div class="button-container">
                 <div class="btn-add" id="add">ADD</div>
@@ -38,7 +37,6 @@
             </div>
             <ul>
                 <li id="change" class="selected" >Home</li>
-<!--                <li id="change" onclick="editor.changeModule('Home');" class="selected" >Home</li>-->
             </ul>
         </div>
         <div class="col-center">
@@ -104,11 +102,9 @@
                 unlock.style.display = 'none';
             }
         }
-
-        var moduleList = Object.keys(editor.drawflow.drawflow);
-        console.log(moduleList);
     </script>
     <script type="module" src="/func/ProjectSelect.js"></script>
+    <script type="module" src="/func/CreateCurvature.js"></script>
     <script type="module" src="/func/InitEditorEvent.js"></script>
     <script type="module" src="/func/DragEvent.js"></script>
     <script type="module" src="/func/ButtonEvent.js"></script>

@@ -1,5 +1,4 @@
 import {newProject, loadProject} from "./ProgMstCRUD.js";
-import {rebindEvents} from "./RebindEvent.js";
 import {rebindModule} from "./ModuleEvent.js";
 
 var tmp_prog_mst = window.tmp_prog_mst;
@@ -42,10 +41,7 @@ window.onload = function() {
                     tmp_prog_mst.viewAttr = JSON.parse(tmp_prog_mst.viewAttr);
                     editor.import(tmp_prog_mst.viewAttr);
 
-                    // Next tick.
-                    Promise.resolve().then(() => {
-                        rebindModule(Object.keys(editor.drawflow.drawflow));
-                    });
+                    rebindModule(Object.keys(editor.drawflow.drawflow));
 
                     // why? // important!!
                     window.tmp_prog_mst = tmp_prog_mst;
